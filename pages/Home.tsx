@@ -9,40 +9,40 @@ const Home: React.FC = () => {
   return (
     <div className="pb-24">
       {/* Hero Section */}
-      <section className="relative min-h-[95vh] flex flex-col items-center justify-center px-6 overflow-hidden">
+      <section className="relative min-h-[85vh] sm:min-h-[95vh] flex flex-col items-center justify-center px-4 sm:px-6 overflow-hidden pt-20 sm:pt-0">
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-electric-blue/10 rounded-full blur-[100px] animate-subtle-glow" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-signal-purple/10 rounded-full blur-[100px] animate-subtle-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-electric-blue/10 rounded-full blur-[100px] animate-subtle-glow" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-signal-purple/10 rounded-full blur-[100px] animate-subtle-glow" style={{ animationDelay: '2s' }} />
         </div>
         
-        <div className="relative z-10 max-w-5xl w-full text-center space-y-14">
-          <div className="space-y-8">
+        <div className="relative z-10 max-w-5xl w-full text-center space-y-8 sm:space-y-14">
+          <div className="space-y-6 sm:space-y-8">
             <div className="flex justify-center">
               <BinaryLogo size="large" />
             </div>
             <div className="space-y-2">
-              <p className="text-xl md:text-2xl text-soft-slate tracking-[0.4em] uppercase font-light max-w-3xl mx-auto">
+              <p className="text-sm sm:text-xl md:text-2xl text-soft-slate tracking-[0.2em] sm:tracking-[0.4em] uppercase font-light max-w-3xl mx-auto px-4">
                 Field Analysis of Kinetic Engagement
               </p>
-              <p className="text-[10px] font-mono text-electric-blue uppercase tracking-[0.8em] opacity-40">An Alpha Tek Research Initiative</p>
+              <p className="text-[9px] sm:text-[10px] font-mono text-electric-blue uppercase tracking-[0.4em] sm:tracking-[0.8em] opacity-40">An Alpha Tek Research Initiative</p>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-10 pt-10">
-            <div className="h-px w-48 bg-gradient-to-r from-transparent via-electric-blue/40 to-transparent" />
-            <p className="text-3xl md:text-5xl text-white font-light tracking-tight max-w-4xl font-display leading-tight italic">
-              “You cannot navigate systems you don’t understand.”
+          <div className="flex flex-col items-center gap-6 sm:gap-10 pt-6 sm:pt-10">
+            <div className="h-px w-32 sm:w-48 bg-gradient-to-r from-transparent via-electric-blue/40 to-transparent" />
+            <p className="text-xl sm:text-3xl md:text-5xl text-white font-light tracking-tight max-w-4xl font-display leading-tight italic px-4">
+              "You cannot navigate systems you don't understand."
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 pt-6">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 pt-4 sm:pt-6 w-full sm:w-auto px-4 sm:px-0">
               <Link 
                 to={isAuthorized ? "/dashboard" : "/auth/login"} 
-                className="px-12 py-5 bg-electric-blue text-midnight hover:bg-white transition-all tracking-[0.3em] uppercase text-xs font-bold font-mono shadow-[0_0_30px_rgba(79,140,255,0.2)]"
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-electric-blue text-midnight hover:bg-white transition-all tracking-[0.2em] sm:tracking-[0.3em] uppercase text-xs font-bold font-mono shadow-[0_0_30px_rgba(79,140,255,0.2)] text-center"
               >
                 {isAuthorized ? 'Enter Research Hub' : 'Join the Research'}
               </Link>
               <Link 
                 to="/domains" 
-                className="px-12 py-5 border border-white/10 text-white hover:bg-white/5 transition-all tracking-[0.3em] uppercase text-xs font-bold font-mono"
+                className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 border border-white/10 text-white hover:bg-white/5 transition-all tracking-[0.2em] sm:tracking-[0.3em] uppercase text-xs font-bold font-mono text-center"
               >
                 Observe Domains
               </Link>
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
         </div>
         
         {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-20">
+        <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-20 hidden sm:flex">
             <span className="text-[10px] font-mono uppercase tracking-[0.4em]">Scroll</span>
             <div className="w-px h-12 bg-white" />
         </div>
@@ -69,7 +69,7 @@ const Home: React.FC = () => {
               <p>
                 Attention has become the most valuable resource on the internet. It is mined, traded, and manufactured, yet rarely understood by those who provide it.
               </p>
-              <ul className="space-y-6 pt-6 border-l-2 border-electric-blue/20 pl-10">
+              <ul className="space-y-6 pt-6 border-l-2 border-electric-blue/20 pl-6 sm:pl-10">
                 <li><span className="text-white font-medium">Velocity</span> is rewarded over <span className="italic">Quality</span>.</li>
                 <li><span className="text-white font-medium">Coordination</span> favors <span className="italic">Visibility</span> over Creativity.</li>
                 <li><span className="text-white font-medium">Engagement</span> is often mistaken for <span className="italic">Truth</span>.</li>
@@ -80,8 +80,8 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-16">
-            <div className="glass-card p-12 space-y-12 border-white/10 bg-white/[0.02]">
+          <div className="space-y-12 sm:space-y-16">
+            <div className="glass-card p-6 sm:p-12 space-y-8 sm:space-y-12 border-white/10 bg-white/[0.02]">
               <div className="space-y-2">
                 <h3 className="text-xs font-mono uppercase tracking-[0.5em] text-electric-blue">Observational Protocol</h3>
                 <p className="text-soft-slate text-sm leading-relaxed font-light">
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
                   {[
                     { label: "Participation Clustering", detail: "How synchronized activity influences platform distribution." },
                     { label: "Visibility Thresholds", detail: "Detecting the breakout points in algorithmic queues." },
-                    { label: "Kinetic Momentum", desc: "Modeling the energy decay of high-velocity signals." }
+                    { label: "Kinetic Momentum", detail: "Modeling the energy decay of high-velocity signals." }
                   ].map((item, idx) => (
                     <div key={idx} className="flex gap-4">
                       <div className="w-1 h-1 bg-electric-blue mt-2 flex-shrink-0" />
@@ -109,8 +109,8 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-12 border border-white/5 bg-midnight space-y-6 text-center">
-               <p className="text-soft-slate text-lg italic font-light">
+            <div className="p-6 sm:p-12 border border-white/5 bg-midnight space-y-6 text-center">
+               <p className="text-soft-slate text-base sm:text-lg italic font-light">
                  "Our tools are designed to observe, measure, and experiment — not to fake outcomes or bypass systems."
                </p>
                <div className="w-12 h-px bg-white/10 mx-auto" />
