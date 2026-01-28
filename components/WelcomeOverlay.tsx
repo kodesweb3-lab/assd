@@ -27,7 +27,7 @@ const OVERLAY_FADE_OUT_END = 3000; // ms
 
 const WelcomeOverlay: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number>(Date.now());
   const binaryGridRef = useRef<Array<{ x: number; y: number; value: string }>>([]);
   const originalOverflowRef = useRef<string>('');

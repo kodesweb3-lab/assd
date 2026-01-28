@@ -24,7 +24,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   const binaryDataRef = useRef<string[]>([]);
   const colsRef = useRef<number>(0);
   const [canvasError, setCanvasError] = useState(false);
@@ -102,7 +102,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({
         // Draw binary digits with subtle color variation
         binaryDataRef.current.forEach((digit, index) => {
           const col = index % colsRef.current;
-          const row = Math.floor(index / cols);
+          const row = Math.floor(index / colsRef.current);
           const x = col * 10 + 5;
           const y = row * 14 + 7;
 
