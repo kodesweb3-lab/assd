@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BinaryLogo from '../components/BinaryLogo';
 
 /**
  * Home Page Mobile View
@@ -15,8 +14,13 @@ const HomeMobile: React.FC = () => {
   return (
     <div className="px-4 py-6 space-y-6">
       {/* Logo */}
-      <div className="flex justify-center py-4">
-        <BinaryLogo size="medium" />
+      <div className="flex flex-col items-center justify-center py-4 space-y-2">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-display uppercase">
+          FAKE
+        </h1>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-signal-purple font-display uppercase">
+          Tek
+        </h2>
       </div>
 
       {/* Quick Cards */}

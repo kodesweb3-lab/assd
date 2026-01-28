@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BinaryLogo from '../components/BinaryLogo';
 
 const HomeDesktop: React.FC = () => {
   const isAuthorized = localStorage.getItem('fake_authorized') === 'true';
@@ -16,8 +15,13 @@ const HomeDesktop: React.FC = () => {
         
         <div className="relative z-10 max-w-5xl w-full text-center space-y-6 sm:space-y-10 md:space-y-14">
           <div className="space-y-4 sm:space-y-6 md:space-y-8">
-            <div className="flex justify-center px-2">
-              <BinaryLogo size="large" />
+            <div className="flex flex-col items-center justify-center px-2 space-y-2">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-white font-display uppercase">
+                FAKE
+              </h1>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-signal-purple font-display uppercase">
+                Tek
+              </h2>
             </div>
             <div className="space-y-1.5 sm:space-y-2">
               <p className="text-xs sm:text-base md:text-xl lg:text-2xl text-soft-slate tracking-[0.15em] sm:tracking-[0.3em] md:tracking-[0.4em] uppercase font-light max-w-3xl mx-auto px-3 sm:px-4">
