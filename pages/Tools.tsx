@@ -58,23 +58,23 @@ const Tools: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-24 space-y-12 sm:space-y-16">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8 sm:py-12 md:py-24 space-y-8 sm:space-y-12 md:space-y-16">
       {/* Header */}
-      <header className="space-y-6 sm:space-y-8 max-w-5xl">
-        <div className="text-xs font-mono uppercase tracking-[0.4em] sm:tracking-[0.6em] text-electric-blue mb-4">Research Domains</div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white font-display">Systems Legibility</h1>
-        <p className="text-soft-slate text-lg sm:text-xl lg:text-2xl font-light leading-relaxed max-w-3xl">
+      <header className="space-y-4 sm:space-y-6 md:space-y-8 max-w-5xl">
+        <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] sm:tracking-[0.4em] md:tracking-[0.6em] text-electric-blue mb-3 sm:mb-4">Research Domains</div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white font-display">Systems Legibility</h1>
+        <p className="text-soft-slate text-base sm:text-lg md:text-xl lg:text-2xl font-light leading-relaxed max-w-3xl">
           We reframe digital platforms as research domains. Our tools observe, measure, and analyze how signals interact with platform distribution thresholds.
         </p>
       </header>
 
       {/* Primary Disclaimer Banner */}
-      <section className="p-6 sm:p-10 border border-electric-blue/20 bg-electric-blue/5 glass-card">
-        <div className="flex items-start gap-4 sm:gap-8">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 border border-electric-blue flex items-center justify-center text-electric-blue font-bold text-xs sm:text-sm">!</div>
-          <div className="space-y-2">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-white">Observational Instrument Disclaimer</h4>
-            <p className="text-xs sm:text-sm text-soft-slate leading-relaxed max-w-4xl">
+      <section className="p-4 sm:p-6 md:p-10 border border-electric-blue/20 bg-electric-blue/5 glass-card">
+        <div className="flex items-start gap-3 sm:gap-4 md:gap-8">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 flex-shrink-0 border border-electric-blue flex items-center justify-center text-electric-blue font-bold text-[10px] sm:text-xs md:text-sm">!</div>
+          <div className="space-y-1.5 sm:space-y-2 min-w-0">
+            <h4 className="text-[10px] sm:text-xs font-mono uppercase tracking-wider text-white">Observational Instrument Disclaimer</h4>
+            <p className="text-[11px] sm:text-xs md:text-sm text-soft-slate leading-relaxed max-w-4xl">
               FAKE tools are built for research, observation, and responsible experimentation. FAKE does not provide automated engagement, artificial amplification, or guaranteed outcomes. The following categories represent our current observational surfaces.
             </p>
           </div>
@@ -82,16 +82,16 @@ const Tools: React.FC = () => {
       </section>
 
       {/* Search and Filter Controls */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Search Bar */}
-        <div className="max-w-2xl">
+        <div className="max-w-2xl w-full">
           <div className="relative">
             <input
               type="text"
               placeholder="Search platforms, capabilities, or services..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-6 py-4 bg-white/5 border border-white/10 text-white placeholder-soft-slate/50 font-mono text-sm focus:outline-none focus:border-electric-blue/50 transition-all"
+              className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white/5 border border-white/10 text-white placeholder-soft-slate/50 font-mono text-xs sm:text-sm focus:outline-none focus:border-electric-blue/50 transition-all"
             />
             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-soft-slate/30">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@ const Tools: React.FC = () => {
 
         {/* Results Count */}
         {filteredServices.length > 0 && (
-          <div className="text-xs font-mono text-soft-slate/60 uppercase tracking-wider">
+          <div className="text-[10px] sm:text-xs font-mono text-soft-slate/60 uppercase tracking-wider">
             {filteredServices.length} {filteredServices.length === 1 ? 'Platform' : 'Platforms'} Found
           </div>
         )}
@@ -146,21 +146,21 @@ const Tools: React.FC = () => {
                 {/* Platform Header - Clickable */}
                 <button
                   onClick={() => togglePlatform(platform.id)}
-                  className="w-full p-4 sm:p-6 text-left flex items-start justify-between gap-3 sm:gap-4 group"
+                  className="w-full p-3 sm:p-4 md:p-6 text-left flex items-start justify-between gap-2 sm:gap-3 md:gap-4 group"
                 >
-                  <div className="flex-1 space-y-2 min-w-0">
+                  <div className="flex-1 space-y-1.5 sm:space-y-2 min-w-0">
                     <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                      <h3 className="text-base sm:text-lg font-bold text-white font-display">{platform.name}</h3>
+                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-white font-display break-words">{platform.name}</h3>
                       {platform.launchStatus === 'day1' && (
                         <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-electric-blue/20 text-electric-blue border border-electric-blue/30">
                           Day-1
                         </span>
                       )}
                     </div>
-                    <p className="text-xs sm:text-sm text-soft-slate leading-relaxed max-w-3xl">
+                    <p className="text-[11px] sm:text-xs md:text-sm text-soft-slate leading-relaxed max-w-3xl break-words">
                       {platform.description}
                     </p>
-                    <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs font-mono text-soft-slate/60 uppercase tracking-wider flex-wrap">
+                    <div className="flex items-center gap-1.5 sm:gap-2 md:gap-4 text-[9px] sm:text-[10px] md:text-xs font-mono text-soft-slate/60 uppercase tracking-wider flex-wrap">
                       <span>{platform.capabilities.length} {platform.capabilities.length === 1 ? 'Capability' : 'Capabilities'}</span>
                       <span className="hidden sm:inline">•</span>
                       <span>{capabilityCount} {capabilityCount === 1 ? 'Variant' : 'Variants'}</span>

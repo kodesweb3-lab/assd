@@ -128,8 +128,8 @@ export const Layout: React.FC<{ children: React.ReactNode; isAuthorized: boolean
   return (
     <div className="min-h-screen flex bg-midnight selection:bg-electric-blue selection:text-midnight">
       <Sidebar isAuthorized={isAuthorized} onLogout={onLogout} isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
-      <main className="flex-grow lg:ml-64 min-h-screen relative w-full lg:w-auto">
-        <div className="p-4 sm:p-6 lg:p-12">
+      <main className="flex-grow lg:ml-64 min-h-screen relative w-full lg:w-auto overflow-x-hidden">
+        <div className="p-3 sm:p-4 md:p-6 lg:p-12">
           {children}
         </div>
       </main>

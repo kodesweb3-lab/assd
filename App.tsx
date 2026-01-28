@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import WelcomeOverlay from './components/WelcomeOverlay';
 import Home from './pages/Home';
 import Tools from './pages/Tools';
 import Ethics from './pages/Ethics';
@@ -42,7 +41,6 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <WelcomeOverlay />
       <Routes>
         {/* Auth Gate Page */}
         <Route path="/auth/login" element={<Onboarding onComplete={handleAuthorize} />} />
