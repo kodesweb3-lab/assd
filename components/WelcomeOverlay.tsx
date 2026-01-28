@@ -36,6 +36,11 @@ const WelcomeOverlay: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Check if window and sessionStorage are available (SSR safety)
+    if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
+      return;
+    }
+
     // Check if already shown this session
     if (sessionStorage.getItem(SESSION_STORAGE_KEY) === 'true') {
       return;
@@ -201,16 +206,19 @@ const WelcomeOverlay: React.FC = () => {
     };
   }, []);
 
-  if (!shouldRender || isComplete) {
+  // Always render container, but hide if complete or not started
+  // This ensures the component mounts and can start animation
+  if (isComplete) {
     return null;
   }
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-midnight pointer-events-none"
+      className="fixed inset-0 z-[9999] bg-midnight"
       style={{
-        opacity: isComplete ? 0 : 1,
+        opacity: shouldRender ? 1 : 0,
+        pointerEvents: shouldRender ? 'auto' : 'none',
         transition: isComplete ? 'opacity 0.3s ease-out' : 'none',
       }}
     >

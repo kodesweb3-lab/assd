@@ -29,7 +29,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({
   const colsRef = useRef<number>(0);
   const [canvasError, setCanvasError] = useState(false);
 
-  const prefersReducedMotion = typeof window !== 'undefined' 
+  const prefersReducedMotion = typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined'
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
     : false;
 
@@ -154,15 +154,17 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({
       {/* Container with binary canvas background and text overlay */}
       <div className="relative flex flex-col items-center">
         {/* Binary canvas - positioned behind text */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
-          style={{
-            mixBlendMode: prefersReducedMotion || canvasError ? 'normal' : 'screen',
-            opacity: prefersReducedMotion || canvasError ? 0 : 0.5,
-            pointerEvents: 'none',
-          }}
-        />
+        {!canvasError && !prefersReducedMotion && (
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{
+              mixBlendMode: 'screen',
+              opacity: 0.5,
+              pointerEvents: 'none',
+            }}
+          />
+        )}
         
         {/* FAKE text - crisp and readable */}
         <div 
@@ -186,22 +188,6 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({
           Tek
         </div>
       </div>
-
-      {/* Fallback: Static text if canvas fails */}
-      {canvasError && (
-        <div className="flex flex-col items-center">
-          <div 
-            className={`${sizeClasses[size]} text-white font-display font-bold tracking-[-0.05em] leading-[0.75]`}
-          >
-            FAKE
-          </div>
-          <div 
-            className={`${tekSizeClasses[size]} text-signal-purple font-display font-bold tracking-[-0.05em] leading-[0.75] mt-2`}
-          >
-            Tek
-          </div>
-        </div>
-      )}
     </div>
   );
 };
