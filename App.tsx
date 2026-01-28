@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
@@ -14,6 +13,10 @@ import DisallowedUse from './pages/DisallowedUse';
 import Dashboard from './pages/Dashboard';
 import Billing from './pages/Billing';
 import Rewards from './pages/Rewards';
+import Scan from './pages/mobile/Scan';
+import Notes from './pages/mobile/Notes';
+import Account from './pages/mobile/Account';
+import { useResponsiveLayout } from './hooks/useResponsiveLayout';
 
 const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAuthorized = localStorage.getItem('fake_authorized') === 'true';
@@ -28,6 +31,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(localStorage.getItem('fake_authorized') === 'true');
+  const { isMobile } = useResponsiveLayout();
 
   const handleAuthorize = () => {
     localStorage.setItem('fake_authorized', 'true');
@@ -114,6 +118,27 @@ const App: React.FC = () => {
               <Rewards />
             </Layout>
           </AuthGuard>
+        } />
+
+        {/* Mobile-specific routes */}
+        <Route path="/scan" element={
+          <AuthGuard>
+            <Layout isAuthorized={isAuthorized} onLogout={handleLogout}>
+              <Scan />
+            </Layout>
+          </AuthGuard>
+        } />
+        <Route path="/notes" element={
+          <AuthGuard>
+            <Layout isAuthorized={isAuthorized} onLogout={handleLogout}>
+              <Notes />
+            </Layout>
+          </AuthGuard>
+        } />
+        <Route path="/account" element={
+          <Layout isAuthorized={isAuthorized} onLogout={handleLogout}>
+            <Account isAuthorized={isAuthorized} onLogout={handleLogout} />
+          </Layout>
         } />
 
         {/* Fallback */}
