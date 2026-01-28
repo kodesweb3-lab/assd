@@ -10,18 +10,8 @@ export const COLORS = {
   white: '#EDEFF6',
 };
 
+// Ordered by popularity: Twitter/X, TikTok, Instagram, YouTube, Telegram, Spotify, LinkedIn, Streaming/Gaming, Website/Traffic, Press/Media, Misc
 export const FULL_INVENTORY: InventoryCategory[] = [
-  {
-    title: "PRESS / MEDIA / AUTHORITY",
-    items: [
-      "Press Release Distribution",
-      "Google Map Citations",
-      "Quora",
-      "IMDb",
-      "HotNewHipHop",
-      "WorldStarHipHop"
-    ]
-  },
   {
     title: "TWITTER / X",
     items: [
@@ -52,6 +42,24 @@ export const FULL_INVENTORY: InventoryCategory[] = [
       "Livestream Views",
       "Followers (No Drop / Low Drop)",
       "Views (Stable Speed)"
+    ]
+  },
+  {
+    title: "INSTAGRAM",
+    items: [
+      "Followers",
+      "Likes",
+      "Views",
+      "Comments",
+      "Story Views",
+      "Reels Views",
+      "Reels Likes",
+      "IGTV Views",
+      "Saves",
+      "Shares",
+      "Live Views",
+      "Followers (Non-Drop)",
+      "Organic Growth"
     ]
   },
   {
@@ -96,6 +104,13 @@ export const FULL_INVENTORY: InventoryCategory[] = [
     ]
   },
   {
+    title: "LINKEDIN / PROFESSIONAL",
+    items: [
+      "LinkedIn",
+      "LinkedIn Other Services"
+    ]
+  },
+  {
     title: "STREAMING / GAMING",
     items: [
       "Twitch",
@@ -117,10 +132,14 @@ export const FULL_INVENTORY: InventoryCategory[] = [
     ]
   },
   {
-    title: "LINKEDIN / PROFESSIONAL",
+    title: "PRESS / MEDIA / AUTHORITY",
     items: [
-      "LinkedIn",
-      "LinkedIn Other Services"
+      "Press Release Distribution",
+      "Google Map Citations",
+      "Quora",
+      "IMDb",
+      "HotNewHipHop",
+      "WorldStarHipHop"
     ]
   },
   {

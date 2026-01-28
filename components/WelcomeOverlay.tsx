@@ -33,181 +33,210 @@ const WelcomeOverlay: React.FC = () => {
   const originalOverflowRef = useRef<string>('');
   const [shouldRender, setShouldRender] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [hasCheckedStorage, setHasCheckedStorage] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Check if window and sessionStorage are available (SSR safety)
+    // Always mount first, then check sessionStorage
     if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
+      setHasCheckedStorage(true);
       return;
     }
 
-    // Check if already shown this session
-    if (sessionStorage.getItem(SESSION_STORAGE_KEY) === 'true') {
-      return;
-    }
-
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      // Show briefly then fade out
-      setShouldRender(true);
-      originalOverflowRef.current = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
+    // Small delay to ensure component is mounted
+    const checkStorage = () => {
+      const alreadySeen = sessionStorage.getItem(SESSION_STORAGE_KEY) === 'true';
+      setHasCheckedStorage(true);
       
-      setTimeout(() => {
+      if (alreadySeen) {
         setIsComplete(true);
-        sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
-        document.body.style.overflow = originalOverflowRef.current;
-      }, 1000);
-      return;
-    }
-
-    setShouldRender(true);
-    startTimeRef.current = Date.now();
-    
-    // Prevent body scroll during overlay
-    originalOverflowRef.current = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      document.body.style.overflow = originalOverflowRef.current;
-      return;
-    }
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      document.body.style.overflow = originalOverflowRef.current;
-      return;
-    }
-
-    // Setup canvas with device pixel ratio (capped at 2 for performance)
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const updateCanvasSize = () => {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.font = `${DEFAULT_BINARY_CONFIG.fontSize}px 'IBM Plex Mono', monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-
-      // Regenerate grid on resize
-      binaryGridRef.current = generateBinaryGrid(
-        rect.width,
-        rect.height,
-        DEFAULT_BINARY_CONFIG.fontSize * 1.5,
-        DEFAULT_BINARY_CONFIG.density
-      );
-    };
-
-    updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
-
-    const animate = () => {
-      const elapsed = Date.now() - startTimeRef.current;
-      const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-
-      if (progress >= 1) {
-        setIsComplete(true);
-        sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
-        document.body.style.overflow = originalOverflowRef.current;
-        window.removeEventListener('resize', updateCanvasSize);
         return;
       }
 
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+      // Start animation
+      startAnimation();
+    };
 
-      // Update binary grid periodically
-      if (elapsed % DEFAULT_BINARY_CONFIG.updateRate < 16) {
-        updateBinaryGrid(binaryGridRef.current, 0.3);
+    const startAnimation = () => {
+
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        // Show briefly then fade out
+        setShouldRender(true);
+        originalOverflowRef.current = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        
+        setTimeout(() => {
+          setIsComplete(true);
+          sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
+          document.body.style.overflow = originalOverflowRef.current;
+        }, 1000);
+        return;
       }
 
-      // Calculate opacities
-      const bgOpacity = calculateOpacity(progress, OVERLAY_FADE_OUT_START / ANIMATION_DURATION, 1);
-      const logoOpacity = calculateOpacity(
-        progress,
-        LOGO_FADE_IN_START / ANIMATION_DURATION,
-        LOGO_FADE_OUT_END / ANIMATION_DURATION
-      );
-      const logoScale = progress < LOGO_FADE_OUT_START / ANIMATION_DURATION
-        ? easing.easeOut((progress - LOGO_FADE_IN_START / ANIMATION_DURATION) / ((LOGO_FADE_IN_END - LOGO_FADE_IN_START) / ANIMATION_DURATION))
-        : 1 - easing.easeIn((progress - LOGO_FADE_OUT_START / ANIMATION_DURATION) / ((LOGO_FADE_OUT_END - LOGO_FADE_OUT_START) / ANIMATION_DURATION));
+      setShouldRender(true);
+      startTimeRef.current = Date.now();
+      
+      // Prevent body scroll during overlay
+      originalOverflowRef.current = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
 
-      // Draw binary background
-      ctx.globalAlpha = bgOpacity * 0.4;
-      binaryGridRef.current.forEach((cell) => {
-        const color = Math.random() > 0.7
-          ? DEFAULT_BINARY_CONFIG.colors.primary
-          : Math.random() > 0.5
-          ? DEFAULT_BINARY_CONFIG.colors.secondary
-          : DEFAULT_BINARY_CONFIG.colors.glow;
-        ctx.fillStyle = color;
-        ctx.fillText(cell.value, cell.x, cell.y);
-      });
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        document.body.style.overflow = originalOverflowRef.current;
+        return;
+      }
 
-      // Draw "FAKE Tek" logo
-      if (progress >= LOGO_FADE_IN_START / ANIMATION_DURATION) {
-        const centerX = canvas.width / dpr / 2;
-        const centerY = canvas.height / dpr / 2;
-        const scale = Math.max(0.1, logoScale);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        document.body.style.overflow = originalOverflowRef.current;
+        return;
+      }
 
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.scale(scale, scale);
-        ctx.translate(-centerX, -centerY);
-
-        ctx.globalAlpha = logoOpacity;
-        ctx.font = 'bold 72px "Space Grotesk", sans-serif';
+      // Setup canvas with device pixel ratio (capped at 2 for performance)
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const updateCanvasSize = () => {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        ctx.font = `${DEFAULT_BINARY_CONFIG.fontSize}px 'IBM Plex Mono', monospace`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        // Render "FAKE" as binary-composed text
-        const fakeText = 'FAKE';
-        const tekText = 'Tek';
-        const fakeY = centerY - 30;
-        const tekY = centerY + 50;
+        // Regenerate grid on resize
+        binaryGridRef.current = generateBinaryGrid(
+          rect.width,
+          rect.height,
+          DEFAULT_BINARY_CONFIG.fontSize * 1.5,
+          DEFAULT_BINARY_CONFIG.density
+        );
+      };
 
-        // Create binary fill effect for FAKE
-        ctx.fillStyle = DEFAULT_BINARY_CONFIG.colors.primary;
-        ctx.fillText(fakeText, centerX, fakeY);
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
 
-        // Add subtle binary overlay on FAKE
-        ctx.globalAlpha = logoOpacity * 0.3;
-        ctx.font = '12px "IBM Plex Mono", monospace';
-        for (let i = 0; i < fakeText.length; i++) {
-          const charX = centerX - (fakeText.length * 20) / 2 + i * 20;
-          const binaryChar = Math.random() > 0.5 ? '1' : '0';
-          ctx.fillText(binaryChar, charX + Math.random() * 10 - 5, fakeY + Math.random() * 10 - 5);
+      const animate = () => {
+        const elapsed = Date.now() - startTimeRef.current;
+        const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+
+        if (progress >= 1) {
+          setIsComplete(true);
+          sessionStorage.setItem(SESSION_STORAGE_KEY, 'true');
+          document.body.style.overflow = originalOverflowRef.current;
+          window.removeEventListener('resize', updateCanvasSize);
+          return;
         }
 
-        // Render "Tek"
-        ctx.globalAlpha = logoOpacity;
-        ctx.font = 'bold 48px "Space Grotesk", sans-serif';
-        ctx.fillStyle = DEFAULT_BINARY_CONFIG.colors.secondary;
-        ctx.fillText(tekText, centerX, tekY);
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
 
-        ctx.restore();
-      }
+        // Update binary grid periodically
+        if (elapsed % DEFAULT_BINARY_CONFIG.updateRate < 16) {
+          updateBinaryGrid(binaryGridRef.current, 0.3);
+        }
+
+        // Calculate opacities
+        const bgOpacity = calculateOpacity(progress, OVERLAY_FADE_OUT_START / ANIMATION_DURATION, 1);
+        const logoOpacity = calculateOpacity(
+          progress,
+          LOGO_FADE_IN_START / ANIMATION_DURATION,
+          LOGO_FADE_OUT_END / ANIMATION_DURATION
+        );
+        const logoScale = progress < LOGO_FADE_OUT_START / ANIMATION_DURATION
+          ? easing.easeOut((progress - LOGO_FADE_IN_START / ANIMATION_DURATION) / ((LOGO_FADE_IN_END - LOGO_FADE_IN_START) / ANIMATION_DURATION))
+          : 1 - easing.easeIn((progress - LOGO_FADE_OUT_START / ANIMATION_DURATION) / ((LOGO_FADE_OUT_END - LOGO_FADE_OUT_START) / ANIMATION_DURATION));
+
+        // Draw binary background
+        ctx.globalAlpha = bgOpacity * 0.4;
+        binaryGridRef.current.forEach((cell) => {
+          const color = Math.random() > 0.7
+            ? DEFAULT_BINARY_CONFIG.colors.primary
+            : Math.random() > 0.5
+            ? DEFAULT_BINARY_CONFIG.colors.secondary
+            : DEFAULT_BINARY_CONFIG.colors.glow;
+          ctx.fillStyle = color;
+          ctx.fillText(cell.value, cell.x, cell.y);
+        });
+
+        // Draw "FAKE Tek" logo
+        if (progress >= LOGO_FADE_IN_START / ANIMATION_DURATION) {
+          const centerX = canvas.width / dpr / 2;
+          const centerY = canvas.height / dpr / 2;
+          const scale = Math.max(0.1, logoScale);
+
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.scale(scale, scale);
+          ctx.translate(-centerX, -centerY);
+
+          ctx.globalAlpha = logoOpacity;
+          ctx.font = 'bold 72px "Space Grotesk", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Render "FAKE" as binary-composed text
+          const fakeText = 'FAKE';
+          const tekText = 'Tek';
+          const fakeY = centerY - 30;
+          const tekY = centerY + 50;
+
+          // Create binary fill effect for FAKE
+          ctx.fillStyle = DEFAULT_BINARY_CONFIG.colors.primary;
+          ctx.fillText(fakeText, centerX, fakeY);
+
+          // Add subtle binary overlay on FAKE
+          ctx.globalAlpha = logoOpacity * 0.3;
+          ctx.font = '12px "IBM Plex Mono", monospace';
+          for (let i = 0; i < fakeText.length; i++) {
+            const charX = centerX - (fakeText.length * 20) / 2 + i * 20;
+            const binaryChar = Math.random() > 0.5 ? '1' : '0';
+            ctx.fillText(binaryChar, charX + Math.random() * 10 - 5, fakeY + Math.random() * 10 - 5);
+          }
+
+          // Render "Tek"
+          ctx.globalAlpha = logoOpacity;
+          ctx.font = 'bold 48px "Space Grotesk", sans-serif';
+          ctx.fillStyle = DEFAULT_BINARY_CONFIG.colors.secondary;
+          ctx.fillText(tekText, centerX, tekY);
+
+          ctx.restore();
+        }
+
+        animationFrameRef.current = requestAnimationFrame(animate);
+      };
 
       animationFrameRef.current = requestAnimationFrame(animate);
+
+      return () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        window.removeEventListener('resize', updateCanvasSize);
+        // Restore original overflow
+        document.body.style.overflow = originalOverflowRef.current || '';
+      };
     };
 
-    animationFrameRef.current = requestAnimationFrame(animate);
+    // Small delay to ensure DOM is ready
+    const timeoutId = setTimeout(checkStorage, 50);
 
     return () => {
+      clearTimeout(timeoutId);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      window.removeEventListener('resize', updateCanvasSize);
-      // Restore original overflow
       document.body.style.overflow = originalOverflowRef.current || '';
     };
   }, []);
 
-  // Always render container, but hide if complete or not started
-  // This ensures the component mounts and can start animation
+  // Don't render until we've checked storage
+  if (!hasCheckedStorage) {
+    return null;
+  }
+
+  // Don't render if already shown
   if (isComplete) {
     return null;
   }
