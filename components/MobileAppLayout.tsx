@@ -161,7 +161,7 @@ const BottomNav: React.FC<{ isAuthorized: boolean; onLogout: () => void }> = ({ 
           <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
             {allSecondaryItems.map((item) => {
               const active = isActive(item.path);
-              const disabled = 'requiresAuth' in item && item.requiresAuth && !isAuthorized;
+              const disabled: boolean = 'requiresAuth' in item && item.requiresAuth && !isAuthorized;
               
               return (
                 <button
